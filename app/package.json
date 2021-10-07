@@ -2,8 +2,8 @@
   "name": "mediasoup-demo-app",
   "version": "3.0.0",
   "private": true,
-  "description": "mediasoup demo app",
-  "author": "Iñaki Baz Castillo <ibc@aliax.net>",
+  "description": "mediasoup demo",
+  "author": "LiHuan <745917886@qq.com>",
   "license": "All Rights Reserved",
   "main": "lib/index.jsx",
   "scripts": {

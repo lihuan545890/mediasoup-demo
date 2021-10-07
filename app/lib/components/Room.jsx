@@ -3,10 +3,8 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ReactTooltip from 'react-tooltip';
 import classnames from 'classnames';
-import clipboardCopy from 'clipboard-copy';
 import * as appPropTypes from './appPropTypes';
 import { withRoomContext } from '../RoomContext';
-import * as requestActions from '../redux/requestActions';
 import { Appear } from './transitions';
 import Me from './Me';
 import ChatInput from './ChatInput';
@@ -23,8 +21,7 @@ class Room extends React.Component
 			roomClient,
 			room,
 			me,
-			amActiveSpeaker,
-			onRoomLinkCopy
+			amActiveSpeaker
 		}	= this.props;
 
 		return (
@@ -35,37 +32,6 @@ class Room extends React.Component
 					<div className='state'>
 						<div className={classnames('icon', room.state)} />
 						<p className={classnames('text', room.state)}>{room.state}</p>
-					</div>
-
-					<div className='room-link-wrapper'>
-						<div className='room-link'>
-							<a
-								className='link'
-								href={room.url}
-								target='_blank'
-								rel='noopener noreferrer'
-								onClick={(event) =>
-								{
-									// If this is a 'Open in new window/tab' don't prevent
-									// click default action.
-									if (
-										event.ctrlKey || event.shiftKey || event.metaKey ||
-										// Middle click (IE > 9 and everyone else).
-										(event.button && event.button === 1)
-									)
-									{
-										return;
-									}
-
-									event.preventDefault();
-
-									clipboardCopy(room.url)
-										.then(onRoomLinkCopy);
-								}}
-							>
-								invitation link
-							</a>
-						</div>
 					</div>
 
 					<Peers />
@@ -152,8 +118,7 @@ Room.propTypes =
 	roomClient      : PropTypes.any.isRequired,
 	room            : appPropTypes.Room.isRequired,
 	me              : appPropTypes.Me.isRequired,
-	amActiveSpeaker : PropTypes.bool.isRequired,
-	onRoomLinkCopy  : PropTypes.func.isRequired
+	amActiveSpeaker : PropTypes.bool.isRequired
 };
 
 const mapStateToProps = (state) =>
@@ -165,22 +130,8 @@ const mapStateToProps = (state) =>
 	};
 };
 
-const mapDispatchToProps = (dispatch) =>
-{
-	return {
-		onRoomLinkCopy : () =>
-		{
-			dispatch(requestActions.notify(
-				{
-					text : 'Room link copied to the clipboard'
-				}));
-		}
-	};
-};
-
 const RoomContainer = withRoomContext(connect(
-	mapStateToProps,
-	mapDispatchToProps
+	mapStateToProps
 )(Room));
 
 export default RoomContainer;
